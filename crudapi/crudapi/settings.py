@@ -28,6 +28,9 @@ INSTALLED_APPS = [
 
     # Custom apps
     'api',
+
+    # Modules
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
