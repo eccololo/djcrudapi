@@ -7,7 +7,7 @@ from .models import Product
 from .serializers import ProductSerializer
 
 # Telling DRF what metod we are using in this API view function.
-@api_view(["GET"])
+@api_view(["GET", "POST"])
 def product_list(request):
 
     if request.method == "GET":
@@ -17,3 +17,12 @@ def product_list(request):
         serializer = ProductSerializer(products, many=True) # many - all data will be serialized
 
         return Response(serializer.data)
+    
+    if request.method == "POST":
+
+        serializer = ProductSerializer(data=request.data)
+
+        if serializer.is_valid():
+
+            serializer.save()
+            return Response(serializer.data)
