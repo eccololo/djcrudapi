@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import status
 
 from .models import Product
 from .serializers import ProductSerializer
@@ -26,3 +27,21 @@ def product_list(request):
 
             serializer.save()
             return Response(serializer.data)
+
+
+@api_view(["GET", "PUT", "DELETE"])
+def product(request, pk):
+
+    try:
+
+        product = Product.objects.get(id=pk)
+
+    except:
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == "GET":
+
+        serializer = ProductSerializer(product)
+
+        return Response(serializer.data)
