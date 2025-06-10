@@ -9,7 +9,7 @@ from .serializers import ProductSerializer
 
 # Telling DRF what metod we are using in this API view function.
 @api_view(["GET", "POST"])
-def product_list(request):
+def product_list(request, format=None):
 
     if request.method == "GET":
 
@@ -27,10 +27,12 @@ def product_list(request):
 
             serializer.save()
             return Response(serializer.data)
+        
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(["GET", "PUT", "DELETE"])
-def product(request, pk):
+def product(request, pk, format=None):
 
     try:
 
@@ -45,3 +47,20 @@ def product(request, pk):
         serializer = ProductSerializer(product)
 
         return Response(serializer.data)
+    
+    elif request.method == "PUT":
+
+        serializer = ProductSerializer(product, data=request.data)
+
+        if serializer.is_valid():
+
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(status=status.HTTP_204_NO_CONTENT) 
+        
+    elif request.method == "DELETE":
+
+       product.delete()
+
+       return Response(status=status.HTTP_204_NO_CONTENT) 
