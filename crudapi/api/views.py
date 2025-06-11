@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 
 from .models import Product
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, RegistrationSerializer
 
 # Telling DRF what metod we are using in this API view function.
 @api_view(["GET", "POST"])
@@ -64,3 +64,24 @@ def product(request, pk, format=None):
        product.delete()
 
        return Response(status=status.HTTP_204_NO_CONTENT) 
+    
+
+@api_view(["POST"])
+def register(request):
+
+    if request.method == "POST":
+
+        serializer = RegistrationSerializer(data=request.data)
+
+        data = {}
+
+        if serializer.is_valid():
+
+            user = serializer.save()
+            data["response"] = "Successfully registered a new user."
+        
+        else:
+
+            data = serializer.errors
+
+        return Response(data)
