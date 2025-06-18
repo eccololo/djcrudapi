@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 
 from .models import Product
 from .serializers import ProductSerializer, RegistrationSerializer
@@ -66,6 +67,7 @@ def product(request, pk, format=None):
        return Response(status=status.HTTP_204_NO_CONTENT) 
     
 
+# User can created user account through API request.
 @api_view(["POST"])
 def register(request):
 
@@ -79,6 +81,10 @@ def register(request):
 
             user = serializer.save()
             data["response"] = "Successfully registered a new user."
+
+            auth_token = Token.objects.get(user=user).key
+
+            data["token"] = auth_token
         
         else:
 

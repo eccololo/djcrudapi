@@ -12,7 +12,8 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ["id", "name", "description", "price"]
 
-    
+
+# User can created user account through API request.
 class RegistrationSerializer(serializers.ModelSerializer):
 
     password2 = serializers.CharField(style={"input_type": "password"}, write_only=True, required=True)
